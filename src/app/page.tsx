@@ -1,9 +1,16 @@
-import Image from "next/image";
-import Main from "./Components/Home/page"
+import Login from "./component/Login/page";
+import Signup from "./component/Signup/page"
+import ViewData from "./component/ViewData/page";
+import Admin from "./authenticators/adminSignup/page";
+import Vendor from "./authenticators/vendorSignup/page";
 export default function Home() {
   return (
     <div>
-      <Main/>
+      {/* <Admin/> */}
+      <Vendor/>
+      {/* <Signup/> */}
+       {/* <Login/> */}
+      {/* <ViewData/> */}
     </div>
   );
 }
