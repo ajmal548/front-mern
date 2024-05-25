@@ -4,7 +4,7 @@ import React from 'react';
 
 const Home = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen bg-purple-400">
       <form className="backdrop-blur-sm bg-white/30 p-6 rounded-lg shadow-md w-full max-w-sm space-y-16">
         <div>
           <h1 className="flex justify-center text-2xl font-semibold">______ Market</h1>
@@ -20,6 +20,7 @@ const Home = () => {
           </Link>
         </div>
       </form>
+      <Link href={"/Vendor"}>v</Link>
     </div>
   );
 }
