@@ -15,6 +15,8 @@ const addProduct = () => {
   const [stock, setStock] = useState('stock');
   const [status, setStatus] = useState('active');
   const [description, setDescription] = useState('');
+  const [vendor_id, setVendor_id] = useState('');
+  const [review_id, setReview_id] = useState('');
   const [picture, setPicture] = useState('');
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -206,6 +208,30 @@ const addProduct = () => {
               placeholder="Description"
             />
           </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="col-span-1">
+              <label className="block mb-2 text-sm font-medium text-gray-700">Vendor ID</label>
+              <input
+                type="text"
+                name="name"
+                value={vendor_id}
+                onChange={(e) => setVendor_id(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Product Name"
+              />
+            </div>
+            <div className="col-span-1">
+              <label className="block mb-2 text-sm font-medium text-gray-700">Review</label>
+              <input
+                type="text"
+                name="category"
+                value={review_id}
+                onChange={(e) => setReview_id(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Category"
+              />
+            </div>
+            </div>
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-700">Product Images</label>
             <input
