@@ -20,18 +20,6 @@ const Signup = () => {
       setErrorMessage("Please enter your email.");
       return;
     }
-    if (!name) {
-      setErrorMessage("enter password.");
-      return;
-    }
-    if (!name) {
-      setErrorMessage("Please enter your mobile No:");
-      return;
-    }
-    if (!email) {
-      setErrorMessage("Please enter your email.");
-      return;
-    }
     if (!password) {
       setErrorMessage("Please enter your password.");
       return;
