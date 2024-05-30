@@ -61,7 +61,7 @@ const Signup = () => {
     }
   } catch (error) {
     console.error("Error:", error);
-    setErrorMessage("Something went wrong. Please try again.");
+    setErrorMessage("Something went wrong");
     setSuccessMessage("");
   }
 };

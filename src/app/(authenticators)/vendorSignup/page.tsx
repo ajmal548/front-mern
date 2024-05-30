@@ -56,7 +56,7 @@ const Vendor = () => {
           setErrorMessage(`Error: ${json.message || "Something went wrong."}`);
         }
       } else {
-        setErrorMessage(`Error: ${json.message || "Something went wrong."}`);
+        setErrorMessage(`Error: ${json.message || "Something went wrongsss."}`);
       }
       setSuccessMessage("");
     }
