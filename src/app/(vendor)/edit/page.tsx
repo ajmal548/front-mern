@@ -4,6 +4,21 @@ import React, { useEffect, useState } from 'react';
 type ProductData = {
   _id: string;
   name: string;
+  category_id: string;
+  quantity: number;
+  brand: string;
+  price: number;
+  // description: string;
+  // color: string;
+  // warranty_info: string;
+  // vendor_id: string;
+  // unit: string;
+  // pack_of_quantity: number;
+  // boosting: string;
+  // stock: string;
+  // status: string;
+  // review_id: string;
+  // picture: string;
 };
 
 type EditProductProps = {
@@ -36,17 +51,20 @@ const Edit: React.FC<EditProductProps> = ({ product, onClose }) => {
     if (product) {
       setId(product._id);
       setName(product.name);
-      setCategory_id
-      setBrand
-      setColor
-      setWarranty_info
-      useState
-      setPack_of_quantity
-      setBoosting
-      setDescription
-      setVendor_id
-      setReview_id
-      setPicture
+      setCategory_id(product.category_id);
+      setBrand(product.brand);
+      // setColor(product.color);
+      // setWarranty_info(product.warranty_info);
+      setPrice(product.price.toString());
+      // setPack_of_quantity(product.pack_of_quantity.toString());
+      // setUnit(product.unit.toString());
+      // setStock(product.stock.toString())
+      // setStatus(product.status.toString())
+      // setBoosting(product.boosting);
+      // setDescription(product.description);
+      // setVendor_id(product.vendor_id);
+      // setReview_id(product.review_id);
+      // setPicture(product.picture);
       
     }
   }, [product]);

@@ -55,7 +55,7 @@ const Category = () => {
         </thead>
         <tbody>
           {categories.map((category) => (
-            <tr key={category._id}>
+            <tr key={category._id} className='bg-slate-300'>
               <td className="py-2 px-4 border-b text-center">{category._id}</td>
               <td className="py-2 px-4 border-b text-center">{category.name}</td>
               <td className="py-2 px-4 border-b text-center">

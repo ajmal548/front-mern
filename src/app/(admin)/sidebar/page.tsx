@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [active, setActive] = useState<string | null>('Dashboard');
+  const [active, setActive] = useState<string | null>(null);
 
   const handleClickItem = (item:string) => {
     setActive(item);

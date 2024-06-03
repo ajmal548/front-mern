@@ -10,6 +10,7 @@ type ProductData = {
   price: number;
   quantity: number;
   category_id: string;
+  stock:string;
 };
 
 const Product = () => {
@@ -52,6 +53,7 @@ const Product = () => {
               <p>Price: {product.price}</p>
               <p>Category: {product.category_id}</p>
               <p>Quantity: {product.quantity}</p>
+              <p>Stock:{product.stock}</p>
               <div className='flex justify-end'>
                 <Link href={"#"}
                   onClick={() => editProduct(product)}
