@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 const addProduct = () => {
   const [name, setName] = useState('');
@@ -20,31 +20,78 @@ const addProduct = () => {
   const [picture, setPicture] = useState('');
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  // const [id, setId] = useState('');
+  const [role, setRole] = useState('')
+  const [data, setData] = useState(null);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No token found, please log in first.");
+        return;
+      }
+      const url = "http://localhost:4000/auth/user";
+      try {
+        const res = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.ok) {
+          const json = await res.json();
+          console.log("user role", json);
+          setData(json);
+          setVendor_id(json.user._id);
+          setRole(json.user.role);
+        } else {
+          setError(`Error: ${res.statusText}`);
+        }
+      } catch (err) {
+        setError(`Error: Unable to fetch data.`);
+      }
+    };
+
+    fetchData();
+  }, [role]);
 
   const newProduct = async (e: React.FormEvent) => {
     e.preventDefault();
-    const url = "http://localhost:4000/product";
+    const token = localStorage.getItem("token");
+    const url = "http://localhost:4000/product/";
     try {
-      const res = await fetch(url, {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name, category_id, brand, color, warranty_info, price, quantity, unit,
-          pack_of_quantity, boosting, stock, status, description, picture
-        })
-      });
-      if (res.ok) {
-        setSuccessMessage("Product added successfully'");
-        setErrorMessage("");
-        console.log('Product added successfully');
-      } else {
-        const errorData = await res.json();
-        setErrorMessage(errorData.message || 'Failed to add product');
-        setSuccessMessage("");
-        console.error('Failed to add product');
+
+      console.log("role:", role)
+      if (role === "vendor") {
+
+        const res = await fetch(url, {
+          method: "post",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            name, category_id,
+            brand, color,
+            warranty_info, price,
+            quantity, unit,
+            pack_of_quantity, boosting,
+            stock, status,
+            // description,picture,
+            vendor_id, review_id,
+          })
+        });
+        if (res.ok) {
+          setSuccessMessage("Product added successfully'");
+          setErrorMessage("");
+          console.log('Product added successfully');
+        } else {
+          const errorData = await res.json();
+          setErrorMessage(errorData.message || 'Failed to add product');
+          setSuccessMessage("");
+          console.error('Failed to add product');
+        }
       }
     } catch (error) {
-      setErrorMessage("Error: " );
+      setErrorMessage("Error: ");
       setSuccessMessage("");
       console.error("Error:", error);
     }
@@ -68,14 +115,14 @@ const addProduct = () => {
             </div>
             <div className="col-span-1">
               <label className="block mb-2 text-sm font-medium text-gray-700">Category</label>
-              <input
-                type="text"
+              <select
                 name="category"
                 value={category_id}
                 onChange={(e) => setCategory_id(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Category"
-              />
+              > <option value="stock">In Stock</option>
+                <option value="outofstock">Out of Stock</option>
+                </select>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -117,7 +164,7 @@ const addProduct = () => {
             <div className="col-span-1">
               <label className="block mb-2 text-sm font-medium text-gray-700">Price</label>
               <input
-                type="text"
+                type="number"
                 name="price"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
@@ -209,7 +256,7 @@ const addProduct = () => {
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="col-span-1">
+            {/* <div className="col-span-1">
               <label className="block mb-2 text-sm font-medium text-gray-700">Vendor ID</label>
               <input
                 type="text"
@@ -219,7 +266,7 @@ const addProduct = () => {
                 className="w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Product Name"
               />
-            </div>
+            </div> */}
             <div className="col-span-1">
               <label className="block mb-2 text-sm font-medium text-gray-700">Review</label>
               <input
@@ -231,7 +278,7 @@ const addProduct = () => {
                 placeholder="Category"
               />
             </div>
-            </div>
+          </div>
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-700">Product Images</label>
             <input
@@ -244,11 +291,11 @@ const addProduct = () => {
             />
           </div>
           <div className="flex justify-end space-x-4">
-        {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>}
-        {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
-        <button type="button" className="px-4 py-2 bg-gray-300 rounded-md">Cancel</button>
-        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
-      </div>
+            {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>}
+            {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
+            <button type="button" className="px-4 py-2 bg-gray-300 rounded-md">Cancel</button>
+            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
+          </div>
         </form>
       </div>
     </>

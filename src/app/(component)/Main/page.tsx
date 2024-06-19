@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-const Home = () => {
+const Main = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-purple-400">
       <form className="backdrop-blur-sm bg-white/30 p-6 rounded-lg shadow-md w-full max-w-sm space-y-16">
@@ -16,13 +16,12 @@ const Home = () => {
           </Link>
         </div>
         <div>
-          <Link href="/" className="flex justify-center italic font-semibold text-red-400">Guest
+          <Link href="/main" className="flex justify-center italic font-semibold text-red-400">Guest
           </Link>
         </div>
       </form>
-      <Link href={"/Vendor"}>v</Link>
     </div>
   );
 }
 
-export default Home
+export default Main

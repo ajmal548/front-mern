@@ -26,11 +26,11 @@ const ViewData = () => {
           const json = await res.json();
           console.log("user role" ,json);
           if (json.user.role === "vendor") {
-            router.push(`/Vendor?id=${json.user._id} ${json.user.role}}`);
+            router.push(`/Vendor?id=${json.user._id} ${json.user.role}`);
             return;
           }
           else if (json.user.role === "admin"){
-            router.push("/Admin");
+            router.push(`/admin?id=${json.user._id} ${json.user.role}`);
             return;
           }
           else{

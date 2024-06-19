@@ -8,7 +8,6 @@ const Vendor = () => {
   const [role ,setRole]=useState('')
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
-  // const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {

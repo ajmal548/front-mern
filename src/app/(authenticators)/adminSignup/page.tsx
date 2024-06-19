@@ -18,7 +18,7 @@ const Admin = () => {
     }
     if (!email) {
       setErrorMessage("Please enter your email.");
-      return;
+      return;}
     if (!password) {
       setErrorMessage("Please enter your password.");
       return;

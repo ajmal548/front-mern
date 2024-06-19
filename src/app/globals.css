@@ -35,3 +35,10 @@
 .scrollable-column::-webkit-scrollbar {
   display: none;  /* Safari and Chrome */
 }
+.zoomable-image {
+  transition: transform 0.2s ease; /* Smooth transition for zoom effect */
+}
+
+.zoomable-image:hover {
+  transform: scale(1.1); /* Scale the image to 110% on hover */
+}

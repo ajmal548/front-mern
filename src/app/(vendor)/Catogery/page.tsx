@@ -12,11 +12,48 @@ const Category = () => {
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [id, setId] = useState('');
+  const [role, setRole] = useState('');
+  const [data, setData] = useState(null);;
+
+  useEffect(()=>{
+    const fetchCategory = async ()=>{
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No token found, please log in first.");
+        return;
+      }
+      const userUrl = "http://localhost:4000/auth/user";
+      try {
+        const userRes = await fetch(userUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (userRes.ok) {
+          const Json = await userRes.json();
+          setData(Json);
+          setId(Json.user.id);
+          setRole(Json.user.role);
+          console.log(Json.user.role)
+        }
+      } catch (err) {
+        setError(`Error: Unable to fetch data.`);
+      }
+      
+    }
+    fetchCategory();
+  },[])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('http://localhost:4000/category/');
+        const token = localStorage.getItem("token");
+        const res = await fetch('http://localhost:4000/category/',{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!res.ok) {
           throw new Error('Network response was not ok');
         }

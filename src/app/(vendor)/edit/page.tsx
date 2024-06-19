@@ -5,20 +5,19 @@ type ProductData = {
   _id: string;
   name: string;
   category_id: string;
-  quantity: number;
   brand: string;
+  color: string;
+  warranty_info: string;
   price: number;
-  // description: string;
-  // color: string;
-  // warranty_info: string;
-  // vendor_id: string;
-  // unit: string;
-  // pack_of_quantity: number;
-  // boosting: string;
-  // stock: string;
-  // status: string;
-  // review_id: string;
-  // picture: string;
+  quantity: number;
+  unit: number;
+  pack_of_quantity: number;
+  boosting: string;
+  stock: string;
+  status: string;
+  description: string;
+  review_id: string;
+  picture: string;
 };
 
 type EditProductProps = {
@@ -41,47 +40,85 @@ const Edit: React.FC<EditProductProps> = ({ product, onClose }) => {
   const [stock, setStock] = useState('stock');
   const [status, setStatus] = useState('active');
   const [description, setDescription] = useState('');
-  const [vendor_id, setVendor_id] = useState('');
   const [review_id, setReview_id] = useState('');
   const [picture, setPicture] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [userId, setUserId] = useState('');
+  const [role, setRole] = useState('')
+  const [data, setData] = useState(null);
+  const [error, setError] = useState('');
+
+
 
   useEffect(() => {
-    if (product) {
-      setId(product._id);
-      setName(product.name);
-      setCategory_id(product.category_id);
-      setBrand(product.brand);
-      // setColor(product.color);
-      // setWarranty_info(product.warranty_info);
-      setPrice(product.price.toString());
-      // setPack_of_quantity(product.pack_of_quantity.toString());
-      // setUnit(product.unit.toString());
-      // setStock(product.stock.toString())
-      // setStatus(product.status.toString())
-      // setBoosting(product.boosting);
-      // setDescription(product.description);
-      // setVendor_id(product.vendor_id);
-      // setReview_id(product.review_id);
-      // setPicture(product.picture);
-      
-    }
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No token found, please log in first.");
+        return;
+      }
+      const url = "http://localhost:4000/auth/user";
+      try {
+        const res = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.ok) {
+          const json = await res.json();
+          console.log("user role", json);
+          setData(json);
+          setUserId(json.user._id);
+          setRole(json.user.role);
+
+          if (product) {
+            setId(product._id);
+            setName(product.name);
+            setCategory_id(product.category_id);
+            setBrand(product.brand);
+            setColor(product.color);
+            setWarranty_info(product.warranty_info);
+            setPrice(product.price.toString());
+            setQuantity(product.quantity.toString());
+            setUnit(product.unit.toString());
+            setPack_of_quantity(product.pack_of_quantity.toString());
+            setBoosting(product.boosting);
+            setDescription(product.description);
+            setReview_id(product.review_id);
+            setStatus(product.status);
+            setStock(product.stock)
+            // setPicture(product.picture);
+
+          }
+        } else {
+          setError(`Error: ${res.statusText}`);
+        }
+      } catch (err) {
+        setError(`Error: Unable to fetch data.`);
+      }
+    };
+
+    fetchData();
   }, [product]);
 
   const updateProduct = async (event: React.FormEvent) => {
     event.preventDefault();
+    const token = localStorage.getItem("token");
     if (!product) {
       setErrorMessage("Product data is not available");
       return;
     }
+    console.log("id:",id);
     const url = `http://localhost:4000/product/${id}`;
     try {
       const res = await fetch(url, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, category_id, brand, color, warranty_info, price, quantity, unit,
-          pack_of_quantity, boosting, stock, status, description, picture }),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          name, category_id, brand, color, warranty_info, price, quantity, unit,
+          pack_of_quantity, boosting, stock, status, description, picture
+        }),
       });
       if (res.ok) {
         setSuccessMessage("Product updated successfully");
@@ -99,9 +136,9 @@ const Edit: React.FC<EditProductProps> = ({ product, onClose }) => {
 
   return (
     <>
-      <div className="justify-center items-center  overflow-x-hidden overflow-y-auto fixed inset-0 z-50  bg-red-200  p-5">
-      <form className="space-y-4" onSubmit={updateProduct}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="fixed inset-0 flex items-center justify-center  bg-slate-500 bg-opacity-100  p-5">
+        <form className="space-y-4" onSubmit={updateProduct}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="col-span-1">
               <label className="block mb-2 text-sm font-medium text-gray-700">Product Name</label>
               <input
@@ -256,17 +293,6 @@ const Edit: React.FC<EditProductProps> = ({ product, onClose }) => {
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="col-span-1">
-              <label className="block mb-2 text-sm font-medium text-gray-700">Vendor ID</label>
-              <input
-                type="text"
-                name="name"
-                value={vendor_id}
-                onChange={(e) => setVendor_id(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Product Name"
-              />
-            </div>
             <div className="col-span-1">
               <label className="block mb-2 text-sm font-medium text-gray-700">Review</label>
               <input
@@ -278,37 +304,26 @@ const Edit: React.FC<EditProductProps> = ({ product, onClose }) => {
                 placeholder="Category"
               />
             </div>
-            </div>
-          <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">Product Images</label>
-            <input
-              type="file"
-              name="images"
-              value={picture}
-              multiple
-              onChange={(e) => setPicture(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
           </div>
-
-        <div className="flex justify-end space-x-4">
-          {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>}
-          {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-300 rounded-md"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded-md"
-          >
-            Save
-          </button>
-        </div>
-      </form>
+          {/* <div>000  */}
+          <div className="flex justify-end space-x-4">
+            {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>}
+            {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 bg-gray-300 rounded-md"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md"
+            >
+              Save
+            </button>
+          </div>
+        </form>
       </div>
     </>
   );
